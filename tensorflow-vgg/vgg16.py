@@ -1,6 +1,5 @@
 import inspect
 import os
-from google.colab import files
 import numpy as np
 import tensorflow as tf
 import time
@@ -84,7 +83,7 @@ class Vgg16:
 
         self.prob = tf.nn.softmax(self.fc8, name="prob")
 
-        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.prob))
+        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.x_, logits=self.prob))
 
         self.correct_prediction = tf.equal(tf.argmax(tf.transpose(self.prob), 1), tf.arg_max(self.y_, 1))
         self.correct_prediction = tf.cast(self.correct_prediction, tf.float32)
