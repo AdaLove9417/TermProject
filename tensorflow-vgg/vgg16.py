@@ -170,8 +170,8 @@ class Vgg16:
                 data_dict[name] = {}
             data_dict[name][idx] = var_out
 
-        np.save(npy_path + '.npy', data_dict)
-        files.download(npy_path)
+        np.save(npy_path, data_dict)
+        files.download(npy_path + '.npy')
         print(("file saved", npy_path))
         return npy_path
 
