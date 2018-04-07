@@ -25,7 +25,7 @@ for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
     feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
     sess.run(vgg.train_op, feed_dict)
-    accuracy = sess.run(vgg.accuracy)
+    accuracy = sess.run(vgg.accuracy, feed_dict)
     print('epoch1 -- test accuracy: {:.1%}'.format(accuracy))
     vgg.save(sess, npy_path='./vgg-16-epoch-{0}'.format(1))
 
