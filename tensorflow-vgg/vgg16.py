@@ -3,7 +3,10 @@ import os
 import numpy as np
 import tensorflow as tf
 import time
-from google.colab import files
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from oauth2client.client import GoogleCredentials
+
 
 VGG_MEAN = [103.939, 116.779, 123.68]
 
@@ -171,7 +174,17 @@ class Vgg16:
             data_dict[name][idx] = var_out
 
         np.save(npy_path, data_dict)
-        files.download(npy_path + '.npy')
+
+        gauth = GoogleAuth()
+        gauth.credentials = GoogleCredentials.get_application_default()
+        drive = GoogleDrive(gauth)
+
+        # Create & upload a file.
+        uploaded = drive.CreateFile({'title': npy_path + '.npy'})
+        uploaded.SetContentFile(npy_path + '.npy')
+        uploaded.Upload()
+        print('Uploaded file with ID {}'.format(uploaded.get('id'))
+
         print(("file saved", npy_path))
         return npy_path
 
