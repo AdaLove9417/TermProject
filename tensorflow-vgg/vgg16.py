@@ -183,7 +183,7 @@ class Vgg16:
         uploaded = drive.CreateFile({'title': npy_path + '.npy'})
         uploaded.SetContentFile(npy_path + '.npy')
         uploaded.Upload()
-        print('Uploaded file with ID {}'.format(uploaded.get('id'))
+        print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
         print(("file saved", npy_path))
         return npy_path
