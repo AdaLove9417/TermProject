@@ -37,25 +37,25 @@ class database:
         self.train_images = []
         self.train_labels = []
         i = 0
-        encoded = np.zeros([num_classes, 1])
+        encoded = np.zeros([1, num_classes])
         for class_label in next(os.walk(train_dir))[1]:
-            encoded[i] = 1
+            encoded[0, i] = 1
             for image in os.listdir(os.path.join(train_dir, class_label)):
                 self.train_images.append(cv2.imread(os.path.join(train_dir, class_label, image)))
                 self.train_labels.append(encoded)
-            encoded[i] = 0
+            encoded[0, i] = 0
             i =  i + 1
         test_dir = os.path.join(imdb_dir, 'test')
         self.test_images = []
         self.test_labels = []
         i = 0
-        encoded = np.zeros([num_classes, 1])
+        encoded = np.zeros([1, num_classes])
         for class_label in next(os.walk(test_dir))[1]:
-            encoded[i] = 1
+            encoded[0, i] = 1
             for image in os.listdir(os.path.join(test_dir, class_label)):
                 self.test_images.append(cv2.imread(os.path.join(test_dir, class_label, image)))
                 self.test_labels.append(encoded)
-            encoded[i] = 0
+            encoded[0, i] = 0
             i = i + 1
         self.train_images = np.asarray(self.train_images)
         self.train_labels = np.asarray(self.train_labels)

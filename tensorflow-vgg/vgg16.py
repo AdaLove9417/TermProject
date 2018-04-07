@@ -39,7 +39,7 @@ class Vgg16:
         assert bgr.get_shape().as_list()[1:] == [224, 224, 3]
 
         self.x_ = tf.placeholder(tf.float32, [None, 224, 224, 3])
-        self.y_ = tf.placeholder(tf.float32, [None, numclasses, 1])
+        self.y_ = tf.placeholder(tf.float32, [None, 1, numclasses])
 
         self.conv1_1 = self.conv_layer(self.x_, 3, 64, "conv1_1")
         self.conv1_2 = self.conv_layer(self.conv1_1, 64, 64, "conv1_2")
@@ -83,7 +83,7 @@ class Vgg16:
 
         self.prob = tf.nn.softmax(self.fc8, name="prob")
 
-        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.x_, logits=self.prob))
+        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.prob))
 
         self.correct_prediction = tf.equal(tf.argmax(tf.transpose(self.prob), 1), tf.arg_max(self.y_, 1))
         self.correct_prediction = tf.cast(self.correct_prediction, tf.float32)
