@@ -1,6 +1,6 @@
 import inspect
 import os
-from google_colab import files
+from google.colab import files
 import numpy as np
 import tensorflow as tf
 import time
