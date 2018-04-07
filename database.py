@@ -2,6 +2,8 @@ import os
 import random
 import tensorflow as tf
 import cv2
+import numpy as np
+import math
 from PIL import Image
 
 class database:
@@ -13,42 +15,54 @@ class database:
         label = folders[-2]
         return label
 
-    def load_set(self, imdb_dir, height, width, batch_size):
+    def reshuffle_test(self):
+        self.test_perm = np.random.permutation(self.test_size)
+
+    def sample_train(self):
+        return self.train_images.take(np.random.choice(self.train_size, self.batch_size), 0),\
+               self.train_labels.take(np.random.choice(self.train_size, self.batch_size), 0)
+
+    def sample_test(self):
+        if (self.test_sample_counter == self.test_sample_end):
+            self.reshuffle_test()
+            self.test_sample_counter = 0
+        sample_vals = range(self.test_sample_counter * self.batch_size,
+                            (self.test_sample_counter + 1) * self.batch_size)
+        self.test_sample_counter = self.test_sample_counter + 1
+        return self.test_images.take(sample_vals), self.test_labels.take(sample_vals)
+
+    def load_set(self, imdb_dir, height, width, batch_size, num_classes):
+        self.batch_size = batch_size
         train_dir = os.path.join(imdb_dir, 'train')
-        train_images = []
-        train_labels = []
+        self.train_images = []
+        self.train_labels = []
+        i = 0
+        encoded = np.zeros([num_classes, 1])
         for class_label in next(os.walk(train_dir))[1]:
-
+            encoded[i] = 1
             for image in os.listdir(os.path.join(train_dir, class_label)):
-                train_images.append(os.path.join(train_dir, class_label, image))
-                train_labels.append(class_label)
+                self.train_images.append(cv2.imread(os.path.join(train_dir, class_label, image)))
+                self.train_labels.append(encoded)
+            encoded[i] = 0
+            i =  i + 1
         test_dir = os.path.join(imdb_dir, 'test')
-        test_images = []
-        test_labels = []
+        self.test_images = []
+        self.test_labels = []
+        i = 0
+        encoded = np.zeros([num_classes, 1])
         for class_label in next(os.walk(test_dir))[1]:
+            encoded[i] = 1
             for image in os.listdir(os.path.join(test_dir, class_label)):
-                test_images.append(os.path.join(test_dir, class_label, image))
-                test_labels.append(class_label)
-        train_input_queue = tf.train.slice_input_producer(
-            [train_images, train_labels])
-        test_input_queue = tf.train.slice_input_producer(
-            [test_images, test_labels])
-
-        # process path and string tensor into an image and a label
-        file_content = tf.read_file(train_input_queue[0])
-        train_image = tf.image.decode_jpeg(file_content, channels=3)
-        train_label = train_input_queue[1]
-
-        file_content = tf.read_file(test_input_queue[0])
-        test_image = tf.image.decode_jpeg(file_content, channels=3)
-        test_label = test_input_queue[1]
-
-        train_image.set_shape([height, width, 3])
-        test_image.set_shape([height, width, 3])
-
-        self.train_image_batch, self.train_label_batch = tf.train.batch(
-            [train_image, train_label],
-            batch_size=batch_size)
-        self.test_image_batch, self.test_label_batch = tf.train.batch(
-            [test_image, test_label],
-            batch_size=batch_size)
+                self.test_images.append(cv2.imread(os.path.join(test_dir, class_label, image)))
+                self.test_labels.append(encoded)
+            encoded[i] = 0
+            i = i + 1
+        self.train_images = np.asarray(self.train_images)
+        self.train_labels = np.asarray(self.train_labels)
+        self.test_images = np.asarray(self.test_images)
+        self.test_labels = np.asarray(self.test_labels)
+        self.train_size = len(self.train_labels)
+        self.test_size = len(self.test_labels)
+        self.reshuffle_test()
+        self.test_sample_counter = 0
+        self.test_sample_end = math.floor(self.test_size / self.batch_size)
