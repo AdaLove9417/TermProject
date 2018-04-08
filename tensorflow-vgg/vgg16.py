@@ -3,6 +3,7 @@ import os
 import numpy as np
 import tensorflow as tf
 import time
+from numpy import matlib
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from oauth2client.client import GoogleCredentials
@@ -89,7 +90,7 @@ class Vgg16:
 
         self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.prob))
         self.max_prob = tf.reduce_max(self.prob, 1)
-        self.diff_max = self.prob - np.repeat(tf.cast(self.max_prob, tf.float32), 8, axis=0)
+        self.diff_max = self.prob - matlib.repmat(tf.cast(self.max_prob, tf.float32), 1, 8)
         self.hot = tf.cast(tf.greater(self.diff_max, 0), tf.float32)
         self.correct_prediction = tf.equal(self.hot, self.y_)
         self.correct_prediction = tf.cast(self.correct_prediction, tf.float32)
