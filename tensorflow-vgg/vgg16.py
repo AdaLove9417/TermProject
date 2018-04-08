@@ -88,8 +88,8 @@ class Vgg16:
         self.prob = tf.nn.softmax(self.fc8, name="prob")
 
         self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.prob))
-
-        self.correct_prediction = tf.equal(tf.cast(tf.greater(self.prob - tf.cast(tf.arg_max(tf.transpose(self.prob), 1), tf.float32), 0), tf.float32), self.y_)
+        self.hot = tf.cast(tf.greater(self.prob - tf.cast(tf.arg_max(tf.transpose(self.prob), 1), tf.float32), 0), tf.float32)
+        self.correct_prediction = tf.equal(self.hot, self.y_)
         self.correct_prediction = tf.cast(self.correct_prediction, tf.float32)
 
         self.accuracy = tf.reduce_mean(self.correct_prediction)
@@ -177,12 +177,12 @@ class Vgg16:
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
-        drive = GoogleDrive(gauth)
+        #drive = GoogleDrive(gauth)
 
         # Create & upload a file.
-        uploaded = drive.CreateFile({'title': npy_path + '.npy'})
-        uploaded.SetContentFile(npy_path + '.npy')
-        uploaded.Upload()
+        #uploaded = drive.CreateFile({'title': npy_path + '.npy'})
+        #uploaded.SetContentFile(npy_path + '.npy')
+        #uploaded.Upload()
         print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
         print(("file saved", npy_path))
