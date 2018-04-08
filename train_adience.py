@@ -25,9 +25,9 @@ for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
     feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
     sess.run(vgg.train_op, feed_dict)
-    [prob, y_] = sess.run([vgg.prob, vgg.y_], feed_dict)
-    print(prob[1])
-    print(y_[1])
+    [prob, max_diff] = sess.run([vgg.max_prob, vgg.diff_max], feed_dict)
+    print(prob)
+    print(max_diff[1])
     #print('epoch{0} -- test accuracy: {1}'.format(i, cross_entropy]))
     vgg.save_npy(sess, npy_path='./vgg-16-epoch-{0}'.format(i))
 
