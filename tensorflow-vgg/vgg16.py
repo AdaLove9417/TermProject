@@ -90,8 +90,8 @@ class Vgg16:
 
         self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.prob))
         self.hot = tf.one_hot(tf.argmax(self.prob, 1), 8)
-        self.correct_prediction = tf.equal(self.hot, self.y_)
-        self.correct_prediction = tf.cast(self.correct_prediction, tf.float32)
+        self.correct_no_cast = tf.equal(self.hot, self.y_)
+        self.correct_prediction = tf.cast(self.correct_no_cast, tf.float32)
 
         self.accuracy = tf.reduce_mean(self.correct_prediction)
 

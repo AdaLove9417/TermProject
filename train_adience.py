@@ -25,7 +25,7 @@ for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
     feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
     sess.run(vgg.train_op, feed_dict)
-    accuracy = sess.run(vgg.correct_prediction, feed_dict)
+    accuracy = sess.run(vgg.correct_no_cast, feed_dict)
     if i % 100 == 0:
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
