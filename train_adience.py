@@ -24,7 +24,8 @@ sess.run(tf.global_variables_initializer())
 for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
     feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
-    [_, loss, accuracy] = sess.run(vgg.train_op, vgg.cross_entropy, vgg.accuracy, feed_dict)
+    sess.run(vgg.train_op, feed_dict)
+    [loss, accuracy] = sess.run(vgg.cross_entropy, vgg.accuracy, feed_dict)
     if i % 1000 == 0:
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
