@@ -34,5 +34,4 @@ for i in range(1, num_batches):
         print(print_str.format(i, accuracy, test_accuracy))
         vgg.save_npy(sess, npy_path='./vgg-16-epoch-{0}'.format(i))
     else:
-        #print('epoch{0} -- train accuracy: {1:.2%}'.format(i, accuracy))
-        print(accuracy)
+        print('epoch{0} -- train accuracy: {1:.2%}'.format(i, accuracy))
