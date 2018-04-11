@@ -29,7 +29,7 @@ class database:
         sample_vals = range(self.test_sample_counter * self.batch_size,
                             (self.test_sample_counter + 1) * self.batch_size)
         self.test_sample_counter = self.test_sample_counter + 1
-        return self.test_images.take(sample_vals), self.test_labels.take(sample_vals)
+        return self.test_images.take(sample_vals, 0), self.test_labels.take(sample_vals, 0)
 
     def load_set(self, imdb_dir, height, width, batch_size, num_classes):
         self.batch_size = batch_size
