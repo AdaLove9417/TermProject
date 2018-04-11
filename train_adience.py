@@ -28,7 +28,7 @@ for i in range(1, num_batches):
     accuracy = sess.run(vgg.accuracy, feed_dict)
     if i % 100 == 0:
         [x_test_batch, y_test_batch] = db.sample_test()
-        feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
+        feed_dict = {vgg.x_: x_test_batch, vgg.y_: y_test_batch}
         test_accuracy = sess.run(vgg.accuracy, feed_dict)
         print_str = 'epoch{0} -- train accuracy: {1:.2%} | test accuracy: {2:.2%}'
         print(print_str.format(i, accuracy, test_accuracy))
