@@ -23,6 +23,10 @@ class database:
                self.train_labels.take(np.random.choice(self.train_size, self.batch_size), 0)
 
     def sample_test(self):
+        return self.test_images.take(np.random.choice(self.test_size, self.batch_size), 0),\
+               self.test_labels.take(np.random.choice(self.test_size, self.batch_size), 0)
+
+    def sample_full_test(self):
         if (self.test_sample_counter == self.test_sample_end):
             self.reshuffle_test()
             self.test_sample_counter = 0
