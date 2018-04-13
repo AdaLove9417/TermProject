@@ -13,12 +13,15 @@ VGG_MEAN = [103.939, 116.779, 123.68]
 
 
 class Vgg16:
-    def __init__(self, trainable=True, dropout=0.5):
-        self.data_dict = None
-        self.trainable = trainable
-        self.dropout = dropout
-        self.var_dict = {}
-        print("npy file loaded")
+    def __init__(self, path=None, trainable=True, dropout=0.5):
+        if path is None:
+            self.data_dict = None
+            self.trainable = trainable
+            self.dropout = dropout
+            self.var_dict = {}
+        else:
+            self.data_dict = np.load(path, encoding='latin1').item()
+            print("npy file loaded")
 
     def build(self, rgb, lr, numclasses, train_mode=None):
         """
