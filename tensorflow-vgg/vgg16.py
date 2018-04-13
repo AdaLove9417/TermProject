@@ -98,7 +98,12 @@ class Vgg16:
 
         self.accuracy = tf.reduce_mean(self.correct_prediction)
 
-        self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=lr)
+        global_step = tf.Variable(0)
+        # Create a decaying learning rate
+        # start, global step, decay step, decay rate, staircase
+        learn_rate = tf.train.exponential_decay(lr, global_step, 100000, 5e-4, staircase=True)
+
+        self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9).minimize(self.cross_entropy)
 
         self.train_op = self.optimizer.minimize(self.cross_entropy)
 
