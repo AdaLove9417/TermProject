@@ -9,7 +9,7 @@ import math
 
 num_batches = 20000
 num_classes = 8
-learning_rate = math.e**(-3)
+learning_rate = 1e-2
 
 db = database.database()
 db.load_set('adience/imdb/', 224, 224, 128, 8)

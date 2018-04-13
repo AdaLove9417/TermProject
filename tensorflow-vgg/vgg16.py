@@ -103,7 +103,7 @@ class Vgg16:
         # start, global step, decay step, decay rate, staircase
         learn_rate = tf.train.exponential_decay(lr, global_step, 100000, 5e-4, staircase=True)
 
-        self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9).minimize(self.cross_entropy)
+        self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9)
 
         self.train_op = self.optimizer.minimize(self.cross_entropy)
 
