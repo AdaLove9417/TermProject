@@ -5,14 +5,14 @@ import os
 sys.path.append(os.path.join(os.getcwd(), 'tensorflow-vgg'))
 import vgg16
 import math
-
+import inspect
 
 num_batches = 20000
 num_classes = 8
 learning_rate = 1e-1
 
 db = database.database()
-db.load_set('adience/imdb/', 224, 224, 64, 8)
+db.load_set('adience/imdb/', 224, 224, 256, 8)
 
 images = tf.placeholder(tf.float32, [None, 224, 224, 3])
 vgg = vgg16.Vgg16()
