@@ -23,6 +23,7 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
+    x_batch = x_batch - db.train_avg
     feed_dict = {vgg.x_: x_batch, vgg.y_: y_batch}
     sess.run(vgg.train_op, feed_dict)
     accuracy = sess.run(vgg.accuracy, feed_dict)

@@ -62,6 +62,7 @@ class database:
             encoded[0, i] = 0
             i = i + 1
         self.train_images = np.asarray(self.train_images)
+        self.train_avg = np.mean(self.train_images, axis=0)
         self.train_labels = np.asarray(self.train_labels)
         self.test_images = np.asarray(self.test_images)
         self.test_labels = np.asarray(self.test_labels)
