@@ -13,13 +13,16 @@ VGG_MEAN = [103.939, 116.779, 123.68]
 
 
 class Vgg16:
-    def __init__(self, path=None, trainable=True, dropout=0.5):
-        if path is None:
+    def __init__(self, scratch=None, trainable=True, dropout=0.5):
+        if scratch is None:
             self.data_dict = None
             self.trainable = trainable
             self.dropout = dropout
             self.var_dict = {}
         else:
+            path = inspect.getfile(Vgg16)
+            path = os.path.abspath(os.path.join(path, os.pardir))
+            path = os.path.join(path, "vgg16.npy")
             self.data_dict = np.load(path, encoding='latin1').item()
             print("npy file loaded")
 
@@ -101,11 +104,11 @@ class Vgg16:
         global_step = tf.Variable(0)
         # Create a decaying learning rate
         # start, global step, decay step, decay rate, staircase
-        learn_rate = tf.train.exponential_decay(lr, global_step, 100000, 5e-4, staircase=True)
+        learn_rate = tf.train.exponential_decay(lr, global_step, 100000, (1-5e-4), staircase=True)
 
         self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9)
 
-        self.train_op = self.optimizer.minimize(self.cross_entropy)
+        self.train_op = self.optimizer.minimize(self.cross_entropy, global_step=global_step)
 
         print(("build model finished: %ds" % (time.time() - start_time)))
         return tf
