@@ -12,7 +12,7 @@ num_classes = 8
 learning_rate = 1e-1
 
 db = database.database()
-db.load_set('adience/imdb/', 224, 224, 256, 8)
+db.load_set('adience/imdb/', 224, 224, 128, 8)
 
 images = tf.placeholder(tf.float32, [None, 224, 224, 3])
 vgg = vgg16.Vgg16()
