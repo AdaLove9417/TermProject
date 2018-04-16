@@ -26,7 +26,7 @@ class Vgg16:
             self.data_dict = np.load(path, encoding='latin1').item()
             print("npy file loaded")
 
-    def build(self, rgb, lr, numclasses, train_mode=None):
+    def build(self, rgb, lr, numclasses, train_mode=None, pretrained=False):
         """
         load variable from npy to build the VGG
 
@@ -94,7 +94,7 @@ class Vgg16:
 
         self.prob = tf.nn.softmax(self.fc8, name="prob")
 
-        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.prob))
+        self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.fc8))
         self.hot = tf.one_hot(tf.argmax(self.prob, 1), 8)
         self.correct_no_cast = tf.not_equal(self.hot, self.y_) #to float true is 0
         self.correct_prediction = tf.cast(self.correct_no_cast, tf.float32)
@@ -106,9 +106,13 @@ class Vgg16:
         # start, global step, decay step, decay rate, staircase
         learn_rate = tf.train.exponential_decay(lr, global_step, 100000, (1-5e-4), staircase=True)
 
-        self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9)
+        non_freeze = ["fc6", "fc7", "fc8"]
 
-        self.train_op = self.optimizer.minimize(self.cross_entropy, global_step=global_step)
+        self.optimizer = tf.train.MomentumOptimizer(learning_rate=learn_rate, momentum=.9)
+        if pretrained:
+            self.train_op = self.optimizer.minimize(self.cross_entropy, global_step=global_step, var_list=non_freeze)
+        else:
+            self.train_op = self.optimizer.minimize(self.cross_entropy, global_step=global_step)
 
         print(("build model finished: %ds" % (time.time() - start_time)))
         return tf
