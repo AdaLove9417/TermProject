@@ -28,11 +28,11 @@ for i in range(1, num_batches):
     sess.run(vgg.train_op, feed_dict)
     accuracy = sess.run(vgg.accuracy, feed_dict)
     cross_entropy = sess.run(vgg.cross_entropy, feed_dict)
+    learn_rate = sess.run(vgg.learn_rate)
     if i % 1000 == 0 or i == 1:
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {vgg.x_: x_test_batch, vgg.y_: y_test_batch}
         test_accuracy = sess.run(vgg.accuracy, feed_dict)
-        learn_rate = sess.run(vgg.learn_rate)
         print_str = 'epoch{0} -- train accuracy: {1:.2%} | test accuracy: {2:.2%}'
         print(print_str.format(i, accuracy, test_accuracy))
         vgg.save_npy(sess, npy_path='./vgg-16-epoch-{0}'.format(i))
