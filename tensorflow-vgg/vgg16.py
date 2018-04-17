@@ -104,7 +104,7 @@ class Vgg16:
         global_step = tf.Variable(0)
         # Create a decaying learning rate
         # start, global step, decay step, decay rate, staircase
-        self.learn_rate = tf.train.exponential_decay(lr, global_step, 100000, (1-5e-4), staircase=True)
+        self.learn_rate = tf.train.exponential_decay(lr, global_step, 1, (1-5e-4), staircase=True)
 
         non_freeze = ["fc6", "fc7", "fc8"]
 
