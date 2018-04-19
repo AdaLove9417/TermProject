@@ -27,11 +27,12 @@ for i in range(0, 3):
                 os.mkdir((to_dir))
             to_dir = os.path.join(to_dir, 'landmark_aligned_face' + '.' + details[2] + '.' + details[1])
         image = cv2.imread(from_dir)
-        image = cv2.resize(image, (256, 256))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = image[16:240, 16:240]
-        image = Image.fromarray(image)
-        image.save(to_dir)
+        if image is not None:
+            image = cv2.resize(image, (256, 256))
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = image[16:240, 16:240]
+            image = Image.fromarray(image)
+            image.save(to_dir)
 
 a = open('fold_{0}_data.txt'.format(4))
 line_iter = iter(a.readlines())
@@ -61,8 +62,9 @@ for j in line_iter:
                 os.mkdir((to_dir))
             to_dir = os.path.join(to_dir, 'landmark_aligned_face' + '.' + details[2] + '.' + details[1])
         image = cv2.imread(from_dir)
-        image = cv2.resize(image, (256, 256))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = image[16:240, 16:240]
-        image = Image.fromarray(image)
-        image.save(to_dir)
+        if image is not None:
+            image = cv2.resize(image, (256, 256))
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = image[16:240, 16:240]
+            image = Image.fromarray(image)
+            image.save(to_dir)
