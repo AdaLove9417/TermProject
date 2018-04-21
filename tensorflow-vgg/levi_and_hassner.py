@@ -39,7 +39,7 @@ class LeviHassner:
         self.conv1 = self.conv_layer(self.x_, 3, 96, 7, "conv1")
         self.relu1 = tf.nn.relu(self.conv1)
         self.pool1 = self.max_pool(self.relu1, 'pool1')
-        self.bn1 = tf.nn.local_response_normalization(self.pool1, 1e-4, beta=.75, bias=2)
+        self.bn1 = tf.nn.local_response_normalization(self.pool1, alpha=1e-4, beta=.75, bias=2)
 
         self.conv2 = self.conv_layer(self.bn1, 96, 256, 5, "conv2")
         self.relu2 = tf.nn.relu(self.conv2)
