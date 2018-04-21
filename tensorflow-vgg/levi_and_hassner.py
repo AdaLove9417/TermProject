@@ -149,31 +149,25 @@ class LeviHassner:
 
         return var
 
-    def save_npy(self, sess, npy_path="./vgg16-save.npy"):
+    def save_npy(self, sess, ckpt_path="./levi_hassner-save.ckpt"):
         assert isinstance(sess, tf.Session)
 
-        data_dict = {}
+        saver = tf.train.Saver()
 
-        for (name, idx), var in list(self.var_dict.items()):
-            var_out = sess.run(var)
-            if name not in data_dict:
-                data_dict[name] = {}
-            data_dict[name][idx] = var_out
-
-        np.save(npy_path, data_dict)
+        saver.save(sess, ckpt_path)
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
         drive = GoogleDrive(gauth)
 
         # Create & upload a file.
-        uploaded = drive.CreateFile({'title': npy_path + '.npy'})
-        uploaded.SetContentFile(npy_path + '.npy')
+        uploaded = drive.CreateFile({'title': ckpt_path + '.npy'})
+        uploaded.SetContentFile(ckpt_path + '.npy')
         uploaded.Upload()
         print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
-        print(("file saved", npy_path))
-        return npy_path
+        print(("file saved", ckpt_path))
+        return ckpt_path
 
     def get_var_count(self):
         count = 0
