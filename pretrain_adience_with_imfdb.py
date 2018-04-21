@@ -15,7 +15,7 @@ db = database.database()
 db.load_set('IMFDB_final/imdb/', 227, 227, 64, 8)
 
 images = tf.placeholder(tf.float32, [None, 227, 227, 3])
-levi_hassner = levi_hassner.LeviHassener()
+levi_hassner = levi_and_hassner.LeviHassener()
 tf = levi_hassner.build(images, learning_rate, 8, tf.constant(True))
 
 sess = tf.Session()
