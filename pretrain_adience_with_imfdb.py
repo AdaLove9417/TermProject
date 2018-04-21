@@ -17,6 +17,8 @@ db.load_set('IMFDB_final/imdb/', 227, 227, 64, 8)
 sess = tf.Session()
 
 images = tf.placeholder(tf.float32, [None, 227, 227, 3])
+train_mode = tf.placeholder(tf.bool)
+pretrain_mode = tf.placeholder(tf.bool)
 levi_hassner = levi_and_hassner.LeviHassner()
 tf = levi_hassner.build(images, learning_rate, 8, tf.constant(True))
 
@@ -24,7 +26,7 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
-    feed_dict = {levi_hassner.x_: x_batch, levi_hassner.y_: y_batch}
+    feed_dict = {levi_hassner.x_: x_batch, levi_hassner.y_: y_batch, train_mode: True, pretrain_mode: False}
     sess.run(levi_hassner.train_op, feed_dict)
     accuracy = sess.run(levi_hassner.accuracy, feed_dict)
     cross_entropy = sess.run(levi_hassner.cross_entropy, feed_dict)
