@@ -38,17 +38,17 @@ class LeviHassner:
 
         self.conv1 = self.conv_layer(self.x_, 3, 96, 7, "conv1")
         self.relu1 = tf.nn.relu(self.conv1)
-        self.pool1 = self.max_pool(self.relu1, 'pool1')
+        self.pool1 = tf.nn.max_pool(self.relu1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool1')
         self.bn1 = tf.nn.local_response_normalization(self.pool1, alpha=1e-4, beta=.75, bias=2)
 
         self.conv2 = self.conv_layer(self.bn1, 96, 256, 5, "conv2")
         self.relu2 = tf.nn.relu(self.conv2)
-        self.pool2 = self.max_pool(self.relu2, 'pool2')
+        self.pool2 = tf.nn.max_pool(self.relu2, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool2')
         self.bn2 = tf.nn.local_response_normalization(self.pool2, alpha=1e-4, beta=.75, bias=2)
 
         self.conv3 = self.conv_layer(self.bn2, 256, 384, 3, "conv3")
         self.relu3 = tf.nn.relu(self.conv3)
-        self.pool3 = self.max_pool(self.relu3, 'pool3')
+        self.pool3 = tf.nn.max_pool(self.relu3, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='SAME', name='pool3')
 
         #flatten_layer_size = tf.contrib.layers.flatten(self.pool3)
         #print(flatten_layer_size)
@@ -154,13 +154,15 @@ class LeviHassner:
 
         data_dict = {}
 
-#        for (name, idx), var in list(self.var_dict.items()):
-#            var_out = sess.run(var)
-#            if name not in data_dict:
-#                data_dict[name] = {}
-#            data_dict[name][idx] = var_out
+        for (name, idx), var in list(self.var_dict.items()):
+            var_out = sess.run(var)
+            if name not in data_dict or name == 'fc4':
+                data_dict[name] = {}
+            data_dict[name][idx] = var_out
 
-        np.save(npy_path, self.var_dict.items())
+        np.save(npy_path, data_dict)
+        fc4_string = npy_path[:-4] + '_fc4'
+        np.save(fc4_string, self.var_dict[('fc4', 0)])
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
@@ -169,6 +171,11 @@ class LeviHassner:
         # Create & upload a file.
         uploaded = drive.CreateFile({'title': npy_path + '.npy'})
         uploaded.SetContentFile(npy_path + '.npy')
+        uploaded.Upload()
+        print('Uploaded file with ID {}'.format(uploaded.get('id')))
+
+        uploaded = drive.CreateFile({'title': npy_path[:-4] + '_fc4.npy'})
+        uploaded.SetContentFile(npy_path[:-4] + '_fc4.npy')
         uploaded.Upload()
         print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
