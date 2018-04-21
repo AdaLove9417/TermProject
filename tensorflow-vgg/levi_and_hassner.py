@@ -50,8 +50,9 @@ class LeviHassner:
         self.relu3 = tf.nn.relu(self.conv3)
         self.pool3 = self.max_pool(self.relu3, 'pool3')
 
-        self.fc4 = self.fc_layer(self.pool3, 9600, 512, "fc4")
-        assert self.fc4.get_shape().as_list()[1:] == [4096]
+        flatten_layer_size = tf.contrib.layers.flatten(self.pool3)
+
+        self.fc4 = self.fc_layer(self.pool3, tf.size(flatten_layer_size), 512, "fc4")
         self.relu4 = tf.nn.relu(self.fc4)
         if train_mode is not None:
             self.relu4 = tf.cond(train_mode, lambda: tf.nn.dropout(self.relu4, self.dropout), lambda: self.relu4)
