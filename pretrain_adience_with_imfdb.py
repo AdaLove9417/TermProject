@@ -2,7 +2,7 @@ import tensorflow as tf
 import database
 import sys
 import os
-sys.path.append(os.path.join(os.getcwd(), 'tensorflow-levi_hassner'))
+sys.path.append(os.path.join(os.getcwd(), 'tensorflow-vgg'))
 import levi_and_hassner
 import math
 import inspect
