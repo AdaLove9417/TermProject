@@ -79,7 +79,7 @@ class LeviHassner:
 
         non_freeze = ["fc5", "fc6", "fc7"]
 
-        self.optimizer = tf.train.MomentumOptimizer(learning_rate=lr)
+        self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=lr)
         if pretrained:
             self.train_op = self.optimizer.minimize(self.cross_entropy, var_list=non_freeze)
         else:
