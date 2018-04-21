@@ -9,10 +9,7 @@ from pydrive.drive import GoogleDrive
 from oauth2client.client import GoogleCredentials
 
 
-VGG_MEAN = [103.939, 116.779, 123.68]
-
-
-class Vgg16:
+class LeviHassener:
     def __init__(self, scratch=None, trainable=True, dropout=0.5):
         if scratch is None:
             self.data_dict = None
@@ -35,19 +32,6 @@ class Vgg16:
 
         start_time = time.time()
         print("build model started")
-        rgb_scaled = rgb * 255.0
-
-        # Convert RGB to BGR
-        red, green, blue = tf.split(axis=3, num_or_size_splits=3, value=rgb_scaled)
-        assert red.get_shape().as_list()[1:] == [224, 224, 1]
-        assert green.get_shape().as_list()[1:] == [224, 224, 1]
-        assert blue.get_shape().as_list()[1:] == [224, 224, 1]
-        bgr = tf.concat(axis=3, values=[
-            blue - VGG_MEAN[0],
-            green - VGG_MEAN[1],
-            red - VGG_MEAN[2],
-        ])
-        assert bgr.get_shape().as_list()[1:] == [224, 224, 3]
 
         self.x_ = tf.placeholder(tf.float32, [None, 224, 224, 3])
         self.y_ = tf.placeholder(tf.float32, [None, 1, numclasses])
