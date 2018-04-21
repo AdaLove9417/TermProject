@@ -9,7 +9,7 @@ import inspect
 
 num_batches = 20000
 num_classes = 8
-learning_rate = 1e-3
+learning_rate = math.e**(-3)
 
 db = database.database()
 db.load_set('IMFDB_final/imdb/', 227, 227, 64, 8)
@@ -34,6 +34,6 @@ for i in range(1, num_batches):
         test_accuracy = sess.run(levi_hassner.accuracy, feed_dict)
         print_str = 'epoch{0} -- train accuracy: {1:.2%} | test accuracy: {2:.2%}'
         print(print_str.format(i, accuracy, test_accuracy))
-        #levi_hassner.save_npy(sess, npy_path='./imfdb_pretrain-epoch-{0}'.format(i))
+        levi_hassner.save_npy(sess, npy_path='./imfdb_pretrain-epoch-{0}'.format(i))
     else:
         print('epoch{0} -- train accuracy: {1:.2%} | loss: {2}'.format(i, accuracy, cross_entropy))

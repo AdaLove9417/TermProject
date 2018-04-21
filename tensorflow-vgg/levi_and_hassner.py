@@ -154,13 +154,13 @@ class LeviHassner:
 
         data_dict = {}
 
-        for (name, idx), var in list(self.var_dict.items()):
-            var_out = sess.run(var)
-            if name not in data_dict:
-                data_dict[name] = {}
-            data_dict[name][idx] = var_out
+#        for (name, idx), var in list(self.var_dict.items()):
+#            var_out = sess.run(var)
+#            if name not in data_dict:
+#                data_dict[name] = {}
+#            data_dict[name][idx] = var_out
 
-        np.save(npy_path, data_dict)
+        np.save(npy_path, self.var_dict)
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
