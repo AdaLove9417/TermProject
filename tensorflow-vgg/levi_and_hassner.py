@@ -160,7 +160,7 @@ class LeviHassner:
 #                data_dict[name] = {}
 #            data_dict[name][idx] = var_out
 
-        np.save(npy_path, self.var_dict)
+        np.save(npy_path, self.var_dict.items())
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
