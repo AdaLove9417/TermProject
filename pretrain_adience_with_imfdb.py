@@ -38,6 +38,7 @@ for i in range(1, num_batches):
         train_accuracy = np.mean(train_accuracy)
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {levi_hassner.x_: x_test_batch, levi_hassner.y_: y_test_batch}
+        test_accuracy = []
         for j in range(1, 10):
             test_accuracy.append(sess.run(levi_hassner.accuracy, feed_dict))
         test_accuracy = np.mean(test_accuracy)
