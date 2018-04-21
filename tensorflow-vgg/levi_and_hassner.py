@@ -162,7 +162,7 @@ class LeviHassner:
 
         np.save(npy_path, data_dict)
         fc4_string = npy_path[:-4] + '_fc4'
-        np.save(fc4_string, self.var_dict[('fc4', 0)])
+        np.save(fc4_string, sess.run(self.var_dict[('fc4', 0)]))
 
         gauth = GoogleAuth()
         gauth.credentials = GoogleCredentials.get_application_default()
