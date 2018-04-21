@@ -20,7 +20,9 @@ class LeviHassner:
             path = inspect.getfile(LeviHassner)
             path = os.path.abspath(os.path.join(path, os.pardir))
             path = os.path.join(path, "levi_and_hassner.npy")
+            path_fc4 = os.path.join(path,'levi_and_hassner_fc4.npy')
             self.data_dict = np.load(path, encoding='latin1').item()
+            self.data_dict['fc4'][0] = np.load(path_fc4, encoding='latin1')
             print("npy file loaded")
 
     def build(self, rgb, lr, numclasses, train_mode=None, pretrained=False):
@@ -163,7 +165,7 @@ class LeviHassner:
             data_dict[name][idx] = var_out
 
         np.save(npy_path, data_dict)
-        fc4_string = npy_path[:-4] + '_fc4'
+        fc4_string = npy_path + '_fc4'
         np.save(fc4_string, sess.run(self.var_dict[('fc4', 0)]))
 
         gauth = GoogleAuth()
@@ -176,8 +178,8 @@ class LeviHassner:
         uploaded.Upload()
         print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
-        uploaded = drive.CreateFile({'title': npy_path[:-4] + '_fc4.npy'})
-        uploaded.SetContentFile(npy_path[:-4] + '_fc4.npy')
+        uploaded = drive.CreateFile({'title': npy_path + '_fc4.npy'})
+        uploaded.SetContentFile(npy_path + '_fc4.npy')
         uploaded.Upload()
         print('Uploaded file with ID {}'.format(uploaded.get('id')))
 
