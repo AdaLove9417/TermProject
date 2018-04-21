@@ -23,7 +23,6 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
-    x_batch = x_batch - db.train_avg
     feed_dict = {levi_hassner.x_: x_batch, levi_hassner.y_: y_batch}
     sess.run(levi_hassner.train_op, feed_dict)
     accuracy = sess.run(levi_hassner.accuracy, feed_dict)
