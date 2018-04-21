@@ -33,8 +33,9 @@ for i in range(1, num_batches):
     if i % 500 == 0 or i == 1:
         train_accuracy = []
         for j in range(1, 10):
-            train_accuracy.append(sess.run(levi_hassner.accuracy, feed_dict))
-        test_accuracy = np.mean(test_accuracy)
+            train_accuracy.append(sess.run(levi_hassner.accuracy, feed_dict={levi_hassner.x_: x_batch, levi_hassner.y_: y_batch,
+                                                       train_mode: True, pretrain_mode: False}))
+        train_accuracy = np.mean(train_accuracy)
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {levi_hassner.x_: x_test_batch, levi_hassner.y_: y_test_batch}
         for j in range(1, 10):
