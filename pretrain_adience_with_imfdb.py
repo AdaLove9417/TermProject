@@ -12,7 +12,7 @@ num_classes = 8
 learning_rate = 1e-3
 
 db = database.database()
-db.load_set('IMFDB-final/imdb/', 227, 227, 64, 8)
+db.load_set('IMFDB_final/imdb/', 227, 227, 64, 8)
 
 images = tf.placeholder(tf.float32, [None, 227, 227, 3])
 vgg = vgg16.Vgg16()
