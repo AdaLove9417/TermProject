@@ -14,11 +14,12 @@ learning_rate = math.e**(-3)
 db = database.database()
 db.load_set('IMFDB_final/imdb/', 227, 227, 64, 8)
 
+sess = tf.Session()
+
 images = tf.placeholder(tf.float32, [None, 227, 227, 3])
 levi_hassner = levi_and_hassner.LeviHassner()
 tf = levi_hassner.build(images, learning_rate, 8, tf.constant(True))
 
-sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
 for i in range(1, num_batches):
