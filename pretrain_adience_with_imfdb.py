@@ -26,10 +26,9 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(1, num_batches):
     [x_batch, y_batch] = db.sample_train()
-    feed_dict = {levi_hassner.x_: x_batch, levi_hassner.y_: y_batch, train_mode: True, pretrain_mode: False}
-    sess.run(levi_hassner.train_op, feed_dict)
-    accuracy = sess.run(levi_hassner.accuracy, feed_dict)
-    cross_entropy = sess.run(levi_hassner.cross_entropy, feed_dict)
+    [_, accuracy, cross_entropy] = sess.run([levi_hassner.train_op, levi_hassner.accuracy, levi_hassner.cross_entropy],
+                                            feed_dict={levi_hassner.x_: x_batch, levi_hassner.y_: y_batch,
+                                                       train_mode: True, pretrain_mode: False})
     if i % 1000 == 0 or i == 1:
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {levi_hassner.x_: x_test_batch, levi_hassner.y_: y_test_batch}
