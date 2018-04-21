@@ -35,7 +35,7 @@ class LeviHassner:
 
         self.x_ = tf.placeholder(tf.float32, [None, 227, 227, 3])
         self.y_ = tf.placeholder(tf.float32, [None, 1, numclasses])
-        self.y_true_cls = tf.argmax(self.y_, dimension=1)
+        self.y_true_cls = tf.argmax(tf.transpose(self.y_))
 
         self.conv1 = self.conv_layer(self.x_, 3, 96, 7, "conv1")
         self.relu1 = tf.nn.relu(self.conv1)
@@ -75,7 +75,7 @@ class LeviHassner:
         #self.hot = tf.one_hot(tf.argmax(self.prob, 1), 8)
         #self.correct_no_cast = tf.not_equal(self.hot, self.y_) #to float true is 0
         #self.correct_prediction = tf.cast(self.correct_no_cast, tf.float32)
-        self.pred_cls = tf.argmax(self.prob)
+        self.pred_cls = tf.argmax(tf.transpose(self.prob))
         self.correct_prediction = tf.equal(self.pred_cls, self.y_true_cls)
         self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
 
