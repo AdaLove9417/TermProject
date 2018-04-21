@@ -9,7 +9,7 @@ from pydrive.drive import GoogleDrive
 from oauth2client.client import GoogleCredentials
 
 
-class LeviHassener:
+class LeviHassner:
     def __init__(self, scratch=None, trainable=True, dropout=0.5):
         if scratch is None:
             self.data_dict = None
@@ -17,9 +17,9 @@ class LeviHassener:
             self.dropout = dropout
             self.var_dict = {}
         else:
-            path = inspect.getfile(Vgg16)
+            path = inspect.getfile(LeviHassner)
             path = os.path.abspath(os.path.join(path, os.pardir))
-            path = os.path.join(path, "vgg16.npy")
+            path = os.path.join(path, "levi_and_hassner.npy")
             self.data_dict = np.load(path, encoding='latin1').item()
             print("npy file loaded")
 
@@ -33,7 +33,7 @@ class LeviHassener:
         start_time = time.time()
         print("build model started")
 
-        self.x_ = tf.placeholder(tf.float32, [None, 224, 224, 3])
+        self.x_ = tf.placeholder(tf.float32, [None, 227, 227, 3])
         self.y_ = tf.placeholder(tf.float32, [None, 1, numclasses])
 
         self.conv1 = self.conv_layer(self.x_, 3, 96, 7, "conv1")
