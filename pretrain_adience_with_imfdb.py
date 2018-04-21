@@ -3,6 +3,7 @@ import database
 import sys
 import os
 sys.path.append(os.path.join(os.getcwd(), 'tensorflow-vgg'))
+import numpy as np
 import levi_and_hassner
 import math
 import inspect
@@ -29,12 +30,18 @@ for i in range(1, num_batches):
     [_, accuracy, cross_entropy] = sess.run([levi_hassner.train_op, levi_hassner.accuracy, levi_hassner.cross_entropy],
                                             feed_dict={levi_hassner.x_: x_batch, levi_hassner.y_: y_batch,
                                                        train_mode: True, pretrain_mode: False})
-    if i % 1000 == 0 or i == 1:
+    if i % 500 == 0 or i == 1:
+        train_accuracy = []
+        for j in range(1, 10):
+            train_accuracy.append(sess.run(levi_hassner.accuracy, feed_dict))
+        test_accuracy = np.mean(test_accuracy)
         [x_test_batch, y_test_batch] = db.sample_test()
         feed_dict = {levi_hassner.x_: x_test_batch, levi_hassner.y_: y_test_batch}
-        test_accuracy = sess.run(levi_hassner.accuracy, feed_dict)
+        for j in range(1, 10):
+            test_accuracy.append(sess.run(levi_hassner.accuracy, feed_dict))
+        test_accuracy = np.mean(test_accuracy)
         print_str = 'epoch{0} -- train accuracy: {1:.2%} | test accuracy: {2:.2%}'
-        print(print_str.format(i, accuracy, test_accuracy))
+        print(print_str.format(i, train_accuracy, test_accuracy))
         levi_hassner.save_npy(sess, npy_path='./imfdb_pretrain-epoch-{0}'.format(i))
     else:
-        print('epoch{0} -- train accuracy: {1:.2%} | loss: {2}'.format(i, accuracy, cross_entropy))
+        print('epoch{0} -- train batch accuracy: {1:.2%} | loss: {2}'.format(i, accuracy, cross_entropy))
