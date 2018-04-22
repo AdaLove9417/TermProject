@@ -16,12 +16,12 @@ class LeviHassner:
             self.trainable = trainable
             self.dropout = dropout
             self.var_dict = {}
-        else:
+        elif scratch:
             path = inspect.getfile(LeviHassner)
             path = os.path.abspath(os.path.join(path, os.pardir))
-            path = os.path.join(path, "levi_and_hassner.npy")
-            path_fc4 = os.path.join(path,'levi_and_hassner_fc4.npy')
-            self.data_dict = np.load(path, encoding='latin1').item()
+            path = os.path.join(path, "levi_and_hassner_pretrain.npy")
+            path_fc4 = os.path.join(path,'levi_and_hassner_pretrain_fc4.npy')
+            self.data_dict = np.load(path, encoding='latin1')
             self.data_dict['fc4'][0] = np.load(path_fc4, encoding='latin1')
             print("npy file loaded")
 
